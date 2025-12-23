@@ -1,0 +1,5 @@
+# Ignore MLflow run artifacts
+MLProject/mlruns/
+__pycache__/
+*.pyc
+.env

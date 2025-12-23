@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Proyek%20MLops/Telco-Churn-CI/MLProject/mlruns/0/3e5f8ec20aea4f92ab1ac62226e41527/artifacts
+end_time: 1766493019102
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3e5f8ec20aea4f92ab1ac62226e41527
+run_name: popular-slug-636
+run_uuid: 3e5f8ec20aea4f92ab1ac62226e41527
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766493012520
+status: 3
+tags: []
+user_id: User

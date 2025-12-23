@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Proyek%20MLops/Telco-Churn-CI/MLProject/mlruns/0/9f799f7dbd8943de8077dee5062acea8/artifacts
+end_time: 1766485125317
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9f799f7dbd8943de8077dee5062acea8
+run_name: enthused-flea-975
+run_uuid: 9f799f7dbd8943de8077dee5062acea8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766485119821
+status: 4
+tags: []
+user_id: User

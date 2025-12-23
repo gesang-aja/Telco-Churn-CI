@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Proyek%20MLops/Telco-Churn-CI/MLProject/mlruns/0/b5b63787bf75490aafaec699a32e76e5/artifacts
+end_time: 1766484422189
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b5b63787bf75490aafaec699a32e76e5
+run_name: popular-crow-424
+run_uuid: b5b63787bf75490aafaec699a32e76e5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766484378977
+status: 4
+tags: []
+user_id: User

@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Proyek%20MLops/Telco-Churn-CI/MLProject/mlruns/0/b59a73fc9efb4132bcbcca9cd2a85be3/artifacts
+end_time: 1766495149925
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b59a73fc9efb4132bcbcca9cd2a85be3
+run_name: angry-bird-429
+run_uuid: b59a73fc9efb4132bcbcca9cd2a85be3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766495141583
+status: 3
+tags: []
+user_id: User

@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Proyek%20MLops/Telco-Churn-CI/MLProject/mlruns/0/c2567c98d2ad4bac8bf8b3e5cdb7eb35/artifacts
+end_time: 1766484936601
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c2567c98d2ad4bac8bf8b3e5cdb7eb35
+run_name: dazzling-ox-79
+run_uuid: c2567c98d2ad4bac8bf8b3e5cdb7eb35
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766484890708
+status: 4
+tags: []
+user_id: User

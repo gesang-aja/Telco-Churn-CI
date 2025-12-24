@@ -1,3 +1,9 @@
+"""
+Telco Churn Classification with MLflow
+Author: Gesang
+Dataset: Telco Customer Churn
+"""
+
 import os
 import argparse
 import pandas as pd
@@ -13,7 +19,13 @@ warnings.filterwarnings("ignore")
 # ===============================
 # MLflow Configuration
 # ===============================
-mlflow.set_tracking_uri("file:./mlruns")
+if os.getenv('GITHUB_ACTIONS'):
+    mlflow.set_tracking_uri("file:./mlruns")
+    print("Running in GitHub Actions - using local file tracking")
+else:
+    mlflow.set_tracking_uri("file:./mlruns")
+    print("Running locally - using local file tracking")
+
 mlflow.set_experiment("telco-churn-classification")
 
 # ===============================
@@ -39,25 +51,25 @@ X_train, X_test, y_train, y_test = train_test_split(
 # Training Function
 # ===============================
 def train_model(n_estimators, random_state):
-    # with mlflow.start_run():
-        mlflow.sklearn.autolog()
-        model = RandomForestClassifier(
-            n_estimators=n_estimators,
-            random_state=random_state,
-            n_jobs=-1
-        )
-        model.fit(X_train, y_train)
+    """Train RandomForestClassifier with MLflow autolog"""
+    mlflow.sklearn.autolog()
+    model = RandomForestClassifier(
+        n_estimators=n_estimators,
+        random_state=random_state,
+        n_jobs=-1
+    )
+    model.fit(X_train, y_train)
 
-        y_pred = model.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred)
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
 
-        # Log manual metrics (optional)
-        mlflow.log_metric("accuracy_manual", acc)
-        mlflow.log_metric("f1_manual", f1)
+    # Log manual metrics (optional)
+    mlflow.log_metric("accuracy_manual", acc)
+    mlflow.log_metric("f1_manual", f1)
 
-        print(f"Accuracy : {acc:.4f}")
-        print(f"F1-score : {f1:.4f}")
+    print(f"Accuracy : {acc:.4f}")
+    print(f"F1-score : {f1:.4f}")
 
 # ===============================
 # Main

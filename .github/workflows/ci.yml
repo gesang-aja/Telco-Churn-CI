@@ -12,32 +12,33 @@ on:
 jobs:
   train-model:
     runs-on: ubuntu-latest
-    outputs:
-      run_id: ${{ steps.get_run_id.outputs.run_id }}
 
     steps:
       # 1️⃣ Checkout repository
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       # 2️⃣ Setup Python
-      - name: Set up Python 3.12.7
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.12.7"
 
-      # 3️⃣ Verify Dataset
-      - name: Verify Dataset
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install pandas==2.1.4 numpy==1.26.2 scikit-learn==1.3.2 mlflow==2.19.0
+
+      # 4️⃣ Verify Dataset
+      - name: Verify dataset exists
         run: |
           if [ ! -f "MLProject/namadataset_preprocessing/TelcoCustomerChurn_preprocessing.csv" ]; then
             echo "Dataset not found!"
             exit 1
           fi
-
-      # 4️⃣ Install dependencies
-      - name: Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install pandas==2.1.4 numpy==1.26.2 scikit-learn==1.3.2 mlflow==2.19.0
+          echo "Dataset found"
+          ls -lh MLProject/namadataset_preprocessing/
 
       # 5️⃣ Run MLflow Project
       - name: Run MLflow Project
@@ -45,48 +46,67 @@ jobs:
           cd MLProject
           mlflow run . --env-manager=local
 
-      # 6️⃣ Get Latest MLflow Run ID
-      - name: Get Latest MLflow Run ID
-        id: get_run_id
+      # 6️⃣ Verify model artifacts
+      - name: Verify MLflow artifacts
         run: |
-          LATEST_RUN=$(ls -dt MLProject/mlruns/*/* | head -1)
-          echo "run_id=${LATEST_RUN##*/}" >> $GITHUB_OUTPUT
+          if [ -d "MLProject/mlruns" ]; then
+            echo "Model artifacts created"
+            find MLProject/mlruns -type f -name "*.pkl" -o -name "*.txt" -o -name "*.yaml" | head -10
+          else
+            echo "No artifacts found"
+            exit 1
+          fi
 
-      # 7️⃣ Upload MLflow Artifacts
-      - name: Upload MLflow Artifacts
+      # 7️⃣ Upload MLflow artifacts to GitHub
+      - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mlflow-artifacts-${{ github.sha }}
           path: MLProject/mlruns/
           retention-days: 90
 
+      # 8️⃣ Optional: Commit artifacts to repo
+      - name: Commit artifacts to repo
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add MLProject/mlruns/ || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "CI: Add MLflow artifacts from run ${{ github.sha }}" && git push) || echo "No changes to commit"
+
+      - name: Training Complete
+        run: |
+          echo "======================================"
+          echo "MLflow model training completed!"
+          echo "Artifacts uploaded to GitHub"
+          echo "======================================"
+
   build-docker:
     needs: train-model
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository again
-      - uses: actions/checkout@v3
-
+      - name: Checkout repository
+        uses: actions/check<<<<<<< HEAD
       # Docker Hub Login
+
       - name: Docker Hub Login
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+
       # Build Docker Image manually
       - name: Build Docker Image
-        run: |
-          cd MLProject
-          docker build -t gesang098/telco-churn-model:latest .
+           with:
+          context: ./MLProject
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest,${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:${{ github.sha }}
 
-      # Push Docker Image
-      - name: Push Docker Image
+      - name: Docker image pushed
         run: |
-          docker push gesang098/telco-churn-model:latest
+          echo "======================================"
+          echo "Docker image pushed to Docker Hub!"
+          echo "Image: ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest"
+          echo "======================================"
 
-      # Post Build Logging
-      - name: Docker Build Complete
-        run: |
-          echo "Docker image pushed: gesang098/telco-churn-model:latest"

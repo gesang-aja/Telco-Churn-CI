@@ -98,7 +98,8 @@ jobs:
 
       # Build Docker Image manually
       - name: Build Docker Image
-          with:
+        uses: docker/build-push-action@v5
+        with:
           context: ./MLProject
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:latest,${{ secrets.DOCKERHUB_USERNAME }}/telco-churn-model:${{ github.sha }}
